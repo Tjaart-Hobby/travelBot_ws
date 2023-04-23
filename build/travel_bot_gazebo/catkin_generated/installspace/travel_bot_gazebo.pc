@@ -1,0 +1,8 @@
+prefix=/home/tjaart/travelBot_ws/install
+
+Name: travel_bot_gazebo
+Description: Description of travel_bot_gazebo
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

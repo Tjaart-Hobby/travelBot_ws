@@ -1,0 +1,2 @@
+travel_bot_description:travel_bot_gazebo
+-DCATKIN_DEVEL_PREFIX=/home/tjaart/travelBot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tjaart/travelBot_ws/install -G Unix Makefiles

@@ -1,0 +1,8 @@
+prefix=/home/tjaart/travelBot_ws/install
+
+Name: travel_bot_description
+Description: Description of travel_bot_description
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

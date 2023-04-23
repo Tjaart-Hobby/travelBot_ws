@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<robot name="travel_bot">
+    <!--to include other files-->
+    <!--xacro:include filename="my_materials.xacro"/-->
+
+    <link name="world_link"/>
+
+ <!--.............................................................caster_link...................................................................-->
+
+    <link name="sphere_link">
+        <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <sphere radius="0.026"/>
+        </geometry>   
+        </visual>
+        <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <sphere radius="0.026"/>
+        </geometry> 
+        </collision>
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.002"/>
+            <inertia ixx="0.0000015417" ixy="0.0" ixz="0.0" iyy="0.0000015417" iyz="0.0" izz="0.0000004"/>
+            <!--I added 1x zero to all inertia calculations to get gazebo view of enertia looking write? all sceuars?-->
+        </inertial>
+        <!--gazebo reference="sphere_link">  gazebo tags outside links, posibly in one gazebo tag
+          <material>Gazebo/Blue</material>
+        </gazebo-->
+
+    </link>
+
+     <joint name="sphere_joint" type="fixed">
+        <parent link="caster_link"/>
+        <child link="sphere_link"/>
+        <origin xyz="0.0 -0.008 -0.02" rpy="0.0 0.0 0.0"/>
+    </joint>   
+
+    <link name="caster_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.0095" length="0.055"/>
+            </geometry>
+        </visual>
+        <collision>
+             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.0095" length="0.055"/>
+            </geometry>    
+        </collision>
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.002"/>
+            <inertia ixx="0.0000015417" ixy="0.0" ixz="0.0" iyy="0.0000015417" iyz="0.0" izz="0.0000004"/>
+        </inertial>
+
+        <gazebo reference="caster_link">
+          <material>Gazebo/Blue</material>
+        </gazebo>
+        
+    </link>
+   
+    <joint name="caster_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="caster_link"/>
+        <axis xyz="0 0 1"/>
+        <origin xyz="0.0 -0.089 0.045" rpy="0 0 0"/>
+    </joint>
+    
+<!--................................................................end caster................................................................-->
+<!-->.................................................................base_link.................................................................-->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.165" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.21 0.255 0.19"/>
+            </geometry>
+            <material name="green">
+                <color rgba="0.2 1 0.2 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.165" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.21 0.255 0.19"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.0 -0.025 0.165" rpy="0.0 0.0 0.0"/>
+            <mass value="1.5"/>
+            <inertia ixx="0.012640625" ixy="0.0" ixz="0.0" iyy="0.009090113" iyz="0.0" izz="0.00668066"/>  <!--still have to work these out online, box of 1.5kg + dimentions-->
+        </inertial>
+
+              <!--gazebo colours moved outside of link-->
+        
+    </link>
+
+    <gazebo reference="base_link">
+        <material>Gazebo/GreenTransparent</material>
+    </gazebo>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="world_link"/>
+        <child link="base_link"/>
+        <origin xyz="1.5 1.0 0.0" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+ <!--................................................................................end base_link..............................................................-->
+ <!--................................................................................right_wheel_link........................................................-->   
+
+    <link name="right_wheel_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+            <!--when using path to mesh file it must be in package and path should start with package://-->
+                <mesh filename="package://travel_bot_description/meshes/Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/>
+            <!--using auto fill mesh block> it gives only variable in scale but three reqiured x,y,x -->
+            </geometry>
+            <material name="blue">
+                <color rgba="0.2 0.2 1 1"/>
+            </material>
+        </visual>
+
+        <collision>
+            <origin xyz="0.03 0.0 0.0" rpy="0.0 -1.5708 0.0"/>
+            <geometry>
+                <cylinder radius="0.08" length="0.045"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0.03 0.0 0.0" rpy="0.0 -1.5708 0.0"/>
+            <mass value="2.0"/>
+            <inertia ixx="0.00305" ixy="0.0" ixz="0.0" iyy="0.00305" iyz="0.0" izz="0.0049"/>  
+            <!--still have to work these out online, cylinder of 2kg + dimentions-->
+        </inertial>
+        
+        <gazebo reference="right_wheel_link">
+          <material>Gazebo/Blue</material>
+        </gazebo>
+
+    </link>
+
+        <link name="left_wheel_link">
+        <visual>
+            <origin xyz="-0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <mesh filename="package://travel_bot_description/meshes/Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="blue">
+                <color rgba="0.2 0.2 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.03 0.0 0.0" rpy="0.0 1.5708 0.0"/>
+            <geometry>
+                <cylinder radius="0.08" length="0.045"/>
+            </geometry>    
+        </collision>
+
+        <inertial>
+            <origin xyz="0.03 0.0 0.0" rpy="0.0 1.5708 0.0"/>
+            <mass value="2.0"/>
+            <inertia ixx="0.00305" ixy="0.0" ixz="0.0" iyy="0.00305" iyz="0.0" izz="0.0049"/>  
+            <!--still have to work these out online, cylinder of 2kg + dimentions-->
+        </inertial>
+
+        <gazebo reference="left_wheel_link">
+          <material>Gazebo/Blue</material>
+        </gazebo>
+
+    </link>
+
+<!--............................................................................................depth_cam_link.......................................................................-->
+
+    <link name="depthCam_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+             <!--origin xyz="1.49 1.0 0.27" rpy="0.0 0.0 0.0"/-->
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <mesh filename="package://travel_bot_description/meshes/Kinect.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="orange">
+                <color rgba="1 0.3 0.1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="-0.01 0.0 0.04" rpy="0.0 0.0 1.5708"/>
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <!--mesh filename="package://travel_bot_description/meshes/Kinect.stl" scale="0.001 0.001 0.001"/-->
+                <box size="0.055 0.26 0.03"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.1"/>
+            <inertia ixx="0.000374017" ixy="0.0" ixz="0.0" iyy="0.000374017" iyz="0.0" izz="0.000081634"/>  <!--still have to work these out online, cylinder of 2kg + dimentions-->
+        </inertial>
+
+        <gazebo reference="depthCam_link">
+          <material>Gazebo/Blue</material>
+        </gazebo>
+
+    </link>
+
+    <gazebo reference="depthCam_link">
+    
+    <sensor type="depth" name="camera">
+      
+      <always_on>true</always_on>
+      <update_rate>30.0</update_rate>
+      <camera>
+        <pose>-0.015 0.0 0.0 0.0 0.0 -1.570796</pose>
+        <horizontal_fov>1.0471975512</horizontal_fov>
+        <image>
+          <format>B8G8R8</format>
+          <width>640</width>
+          <height>480</height>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>8.0</far>
+        </clip>
+      </camera>
+      <plugin name="kinect_camera_controller" filename="libgazebo_ros_openni_kinect.so">
+        <cameraName>camera</cameraName>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.10</updateRate>
+        <imageTopicName>rgb/image_raw</imageTopicName>
+        <depthImageTopicName>depth/image_raw</depthImageTopicName>
+        <pointCloudTopicName>depth/points</pointCloudTopicName>
+        <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+        <frameName>camera_frame</frameName>
+        <baseline>0.1</baseline>
+        <distortion_k1>0.0</distortion_k1>
+        <distortion_k2>0.0</distortion_k2>
+        <distortion_k3>0.0</distortion_k3>
+        <distortion_t1>0.0</distortion_t1>
+        <distortion_t2>0.0</distortion_t2>
+        <pointCloudCutoff>0.4</pointCloudCutoff>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+    <joint name="depthCam_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="depthCam_link"/>
+        <origin xyz="-0.008 0.0 0.27" rpy="0.0 0.0 3.14159"/>
+    </joint>
+    
+<!--......................................lidar_link........................................................................................-->
+    <link name="lidar_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5708 0.0 0.0"/>
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <mesh filename="package://travel_bot_description/meshes/LD06_LiDAR.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.017 -0.028 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <!--mesh filename="package://travel_bot_description/meshes/LD06_LiDAR.stl" scale="0.001 0.001 0.001"/-->
+                <cylinder radius="0.02" length="0.032"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.002"/>
+            <inertia ixx="0.000015417" ixy="0.0" ixz="0.0" iyy="0.000015417" iyz="0.0" izz="0.000004"/>  
+        </inertial>
+
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="lidarBracket_link"/>
+        <child link="lidar_link"/>
+        <origin xyz="-0.016 0.072 0.123" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+<!--gazebo tags ourside of link tags for collour ? maybe everthing gazebo?-->
+    <gazebo reference="lidar_link">
+        <material>Gazebo/Blue</material>
+        <sensor name="laser" type="ray">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+               <scan>
+                   <horizontal>
+                       <samples>400</samples>
+                       <resolution>1</resolution>
+                       <min_angle>-3.14</min_angle>
+                       <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.02</min>
+                    <max>12</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+            <plugin name="laser_controler" filename="libgazebo_ros_laser.so">
+                <topicName>/scan</topicName>
+                <frameName>lidar_link</frameName>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+
+ <!--......................................................................end lidar_link............................................................-->   
+
+    <link name="lidarBracket_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.07" rpy="0.0 0.0 0.0"/>
+            
+            <geometry>
+            <!--filename says path to file but filename works as long as in meshes folder under package folder-->
+                <!--mesh filename="Hoverboard_Wheel_6_in.stl" scale="0.001 0.001 0.001"/--><!--no it doesn,t-->
+                <mesh filename="package://travel_bot_description/meshes/lidarMount.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="pink">
+                <color rgba="1 0.7 0.7 1"/>
+            </material>
+        </visual>
+        <!--collision>
+            <origin xyz="0.5 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <cylinder radius="0.085" length="0.06"/>
+        </collision-->
+
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.001"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>  <!--still have to work these out online, cylinder of 2kg + dimentions-->
+        </inertial>
+
+        <gazebo reference="lidarBracket_link">
+          <material>Gazebo/Blue</material>
+        </gazebo>
+
+    </link>
+
+
+
+    <joint name="lidarBracket_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidarBracket_link"/>
+        <origin xyz="0.006 -0.18 0.247" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+<gazebo>
+  <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+
+    <!-- Plugin update rate in Hz -->
+    <updateRate>20</updateRate>
+
+    <!-- Name of left joint, defaults to `left_joint` -->
+    <leftJoint>left_wheel_joint</leftJoint>
+
+    <!-- Name of right joint, defaults to `right_joint` -->
+    <rightJoint>right_wheel_joint</rightJoint>
+
+    <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
+    <wheelSeparation>0.28</wheelSeparation>
+
+    <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
+    <wheelDiameter>0.15</wheelDiameter>
+
+    <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
+    <wheelAcceleration>1.0</wheelAcceleration>
+
+    <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
+    <wheelTorque>20</wheelTorque>
+
+    <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
+    <commandTopic>cmd_vel</commandTopic>
+
+    <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
+    <odometryTopic>odom</odometryTopic>
+
+    <!-- Odometry frame, defaults to `odom` -->
+    <odometryFrame>odom</odometryFrame>
+
+    <!-- Robot frame to calculate odometry from, defaults to `base_footprint` -->
+    <robotBaseFrame>base_link</robotBaseFrame>
+
+    <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+    <odometrySource>world</odometrySource>
+
+    <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+    <publishWheelTF>true</publishWheelTF>
+
+    <!-- Set to true to publish transforms for the odometry, defaults to true -->
+    <publishOdom>true</publishOdom>
+
+    <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+    <publishWheelJointState>true</publishWheelJointState>
+
+    <!-- Set to true to swap right and left wheels, defaults to true -->
+    <legacyMode>false</legacyMode>
+  </plugin>
+</gazebo>
+
+    
+    <joint name="right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel_link"/>
+        <axis xyz="-1 0 0"/>   <!--removing this tag changes nothing? maybe its in wrong posision/works fine, origin was wrong-->
+        <origin xyz="0.1 0.045 0.075" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel_link"/>
+        <axis xyz="1 0 0"/>
+        <origin xyz="-0.1 0.045 0.075" rpy="0.0 3.14159 0.0"/>
+    </joint>
+    
+
+</robot>
